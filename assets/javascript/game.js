@@ -10,21 +10,23 @@ var wordGuessGame = {
 
     init: function () {
         // Set the internal variables
-        this.winCount = 0;
-        this.lossCount = 0;
-        this.usedGuesses = [];
-        this.currentWord = [];
-        this.displayWord;
-        this.displayWordArray = [];
-        this.wordList;
-        this.unSolvedLetterCount;
-        this.remainingGuesses = 9;
+        this.winCount = 0;  // Current Win Count
+        this.lossCount = 0; // Current Loss Count
+        this.usedGuesses = []; // Array of used guess for current round
+        this.currentWord = []; // Array of the current word. @ will replace correctly guessed letters
+        this.currentWordStr; // A string of the current word.
+        this.displayWord; // A string, spaced seperated, of the current word with a _ for unguessed letters
+        this.displayWordArray = []; // A array, spaced seperated, of the current word with a _ for unguessed letters
+        this.wordList; // An object of words. Two Parts: 'word' type string and 'used' type Boolean
+        this.unSolvedLetterCount; // Count of unsolved letters in the current word
+        this.remainingGuesses = 9; // Remaining guess Count
+        this.previousWord; // Stores the previous word, only used by front end for display purposes
         // Populate the Original Screen
         displayWC.textContent = this.winCount;
         displayLC.textContent = this.lossCount;
         // Run the Initialization Functions
-        this.loadQuestions();
-        this.nextQuestion();
+        this.loadWords();
+        this.nextWord();
 
     },
 
@@ -55,44 +57,49 @@ var wordGuessGame = {
         if (this.unSolvedLetterCount === 0 && this.wordList.length === 0) {
             this.winCount++;
             displayWC.textContent = this.winCount;
+            this.previousWord = this.currentWord;
             return "GAMEOVER";
         }
         // Check to see if the word is solved, request the next question
         else if (this.unSolvedLetterCount === 0) {
             this.winCount++;
             displayWC.textContent = this.winCount;
-            this.nextQuestion();
+            this.previousWord = this.currentWord;
+            this.nextWord();
             return "WIN";
         }
         // Check to see if the word is unsolved, no guesses remain, and if any words remain
         else if (this.unSolvedLetterCount > 0 && this.wordList.length === 0 && this.remainingGuesses === 0 ) {
             this.lossCount++;
             displayLC.textContent = this.lossCount;
+            this.previousWord = this.currentWord;
             return "GAMEOVER";
         }
         // Check to see if the word is unsolved, no guesses remain, and if any words remain
         else if (this.unSolvedLetterCount > 0 && this.remainingGuesses === 0 ) {
             this.lossCount++;
             displayLC.textContent = this.lossCount;
-            this.nextQuestion();
+            this.previousWord = this.currentWord;
+            this.nextWord();
             return "LOSS";
         }
         return "NEXTLETTER";
     },
 
-    nextQuestion: function () {
+    nextWord: function () {
         //reset remaining guesses
         this.remainingGuesses = 9;
         // Get a randmon index from the array
         var ranIndex = Math.floor(Math.random() * this.wordList.length);
         // Turn the word into an array and set the display words to _ _ _ _
         this.unSolvedLetterCount = this.wordList[ranIndex].word.length;
+        this.currentWordStr = this.wordList[ranIndex].word;
         this.currentWord = this.wordList[ranIndex].word.split('');
         this.displayWord = "";
         this.displayWordArray = [];
         for (var i = 0; i < this.currentWord.length; i++) {
             this.displayWordArray.push("_");
-            this.displayWord = this.displayWord + "_*";
+            this.displayWord = this.displayWord + "_ ";
         }
         // remove that extra space from the end of display word
         this.displayWord = this.displayWord.substr(0,this.displayWord.length-1);
@@ -128,13 +135,13 @@ var wordGuessGame = {
         }
         this.displayWord = "";
         for (var i = 0; i < this.displayWordArray.length; i++) {
-            this.displayWord = this.displayWord + this.displayWordArray[i] + "*";
+            this.displayWord = this.displayWord + this.displayWordArray[i] + " ";
         }
         // Remove that extra space from the displayword.
         this.displayWord = this.displayWord.substr(0,this.displayWord.length-1);
     },
 
-    loadQuestions: function () {
+    loadWords: function () {
         this.wordList = [
             { word: "word1", used: false },
             { word: "word2", used: false },
