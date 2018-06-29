@@ -1,0 +1,43 @@
+
+body {
+    background-color: lightgrey;
+}
+
+.header-screen {
+    background-color: gray;
+    border-bottom: 2px solid black;
+    border-top-left-radius:  20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius:  0px;
+    border-bottom-right-radius: 0px;
+    margin-bottom: 0px;
+    padding: 20px;
+}
+
+.instruction-screen {
+    background-color: darkgray;
+    border-bottom: 2px solid lightgrey;
+    border-radius:  0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding: 20px;
+}
+
+.game-screen {
+    border-top-left-radius:  0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius:  20px;
+    border-bottom-right-radius: 20px;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.cup-image {
+    float: left;
+    max-width: 300px;
+    max-height: 300px;
+    height: auto; 
+    margin-top: 10px;
+    margin-right: 25px; 
+}
+

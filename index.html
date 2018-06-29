@@ -1,49 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Word Guess Game</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-        <h1>The Word Guess Game</h1>
-    <p>
-        Pick a letter, get the word!
-    </p>
-    <p>
-        Wins:
-        <strong>
-            <span id="win-count">
-            </span>
-        </strong>
-    </p>
-    <p>
-        Losses:
-        <strong>
-            <span id="loss-count">
-            </span>
-        </strong>
-    </p>
-    <p>
-        Current Word: <strong><span id="current-word"></span></strong>
-    </p>
-    <p>
-        Guesses Left:
-        <strong>
-            <span id="remaining-guess-count">
-            </span>
-        </strong>
-    </p>
-    <p>
-        Your Guesses so far:
-        <strong>
-            <span id="used-guesses">
-            </span>
-        </strong>
-    </p>
 
-    
+<body>
+    <div class="container">
+        <div class="jumbotron header-screen">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <H1>World Cup Country Guess Game</H1>
+                </div>
+            </div>
+        </div>
+        <div class="jumbotron instruction-screen">
+            <div class="row">
+                <div class="col-11 offset-md-1 text-center">
+                    <H2>Pick a letter, get the country!</H2>
+                </div>
+            </div>
+        </div>
+        <div class="jumbotron game-screen">
+            <div class="row">
+                <div class="col-md-6">
+                    <img class="img-fluid cup-image" src="assets/images/worldcuptrophy.jpg" alt="World Cup Trophy">
+                </div>
+                <div class="col-md-6 align-center">
+                    <p>
+                        Wins:
+                        <strong>
+                            <span id="win-count">
+                            </span>
+                        </strong>
+                    </p>
+                    <p>
+                        Losses:
+                        <strong>
+                            <span id="loss-count">
+                            </span>
+                        </strong>
+                    </p>
+                    <p>
+                        Current Word:
+                        <strong>
+                            <span id="current-word"></span>
+                        </strong>
+                    </p>
+                    <p>
+                        Guesses Left:
+                        <strong>
+                            <span id="remaining-guess-count">
+                            </span>
+                        </strong>
+                    </p>
+                    <p>
+                        Your Guesses so far:
+                        <strong>
+                            <span id="used-guesses">
+                            </span>
+                        </strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Stuff -->
+    <div class="container">
+        <!-- The Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <H4>World Cup Country Guess Game</H4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <span id="model-text"></span>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- -->
+
     <script src="assets/javascript/game.js"></script>
 </body>
+
 </html>

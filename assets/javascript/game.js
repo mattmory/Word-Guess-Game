@@ -4,7 +4,7 @@ var displayLC = document.getElementById("loss-count");
 var displayRGC = document.getElementById("remaining-guess-count");
 var displayUG = document.getElementById("used-guesses");
 var displayCW = document.getElementById("current-word");
-
+var displayMT = document.getElementById("model-text");
 // Main wordGuessGame Object
 var wordGuessGame = {
 
@@ -20,7 +20,7 @@ var wordGuessGame = {
         this.wordList; // An object of words. Two Parts: 'word' type string and 'used' type Boolean
         this.unSolvedLetterCount; // Count of unsolved letters in the current word
         this.remainingGuesses = 9; // Remaining guess Count
-        this.previousWord; // Stores the previous word, only used by front end for display purposes
+        this.previousWords = []; // Stores the previous words, only used by front end for display purposes
         // Populate the Original Screen
         displayWC.textContent = this.winCount;
         displayLC.textContent = this.lossCount;
@@ -30,7 +30,7 @@ var wordGuessGame = {
 
     },
 
-    // This will return "NEXTLETTER" - "USEDLETTER" - "LOSS" - "WIN" - "GAMEOVER"
+    // This will return "NEXTLETTER" - "USEDLETTER" - "LOSS" - "WIN" - "GAMEOVER-WIN", "GAMEOVER-LOSS"
     // Returns can be ignored or used for formatting the display.
     letterGuess: function (guess) {
         // Take the guess and check it out.
@@ -39,7 +39,7 @@ var wordGuessGame = {
         }
         // See if it's in the array
         else if (this.currentWord.indexOf(guess.toLowerCase()) != -1) {
-            this.remainingGuesses--;
+           // this.remainingGuesses--;
             this.usedGuesses.push(guess.toLowerCase());
             this.formatWordDisplay(guess);
         }
@@ -57,14 +57,12 @@ var wordGuessGame = {
         if (this.unSolvedLetterCount === 0 && this.wordList.length === 0) {
             this.winCount++;
             displayWC.textContent = this.winCount;
-            this.previousWord = this.currentWord;
-            return "GAMEOVER";
+            return "GAMEOVER-WIN";
         }
         // Check to see if the word is solved, request the next question
         else if (this.unSolvedLetterCount === 0) {
             this.winCount++;
             displayWC.textContent = this.winCount;
-            this.previousWord = this.currentWord;
             this.nextWord();
             return "WIN";
         }
@@ -72,14 +70,12 @@ var wordGuessGame = {
         else if (this.unSolvedLetterCount > 0 && this.wordList.length === 0 && this.remainingGuesses === 0 ) {
             this.lossCount++;
             displayLC.textContent = this.lossCount;
-            this.previousWord = this.currentWord;
-            return "GAMEOVER";
+            return "GAMEOVER-LOSS";
         }
         // Check to see if the word is unsolved, no guesses remain, and if any words remain
         else if (this.unSolvedLetterCount > 0 && this.remainingGuesses === 0 ) {
             this.lossCount++;
             displayLC.textContent = this.lossCount;
-            this.previousWord = this.currentWord;
             this.nextWord();
             return "LOSS";
         }
@@ -94,6 +90,8 @@ var wordGuessGame = {
         // Turn the word into an array and set the display words to _ _ _ _
         this.unSolvedLetterCount = this.wordList[ranIndex].word.length;
         this.currentWordStr = this.wordList[ranIndex].word;
+        // Add the word to the list of previous words
+        this.previousWords[this.winCount+this.lossCount] = this.wordList[ranIndex].word;
         this.currentWord = this.wordList[ranIndex].word.split('');
         this.displayWord = "";
         this.displayWordArray = [];
@@ -141,26 +139,77 @@ var wordGuessGame = {
         this.displayWord = this.displayWord.substr(0,this.displayWord.length-1);
     },
 
+    
     loadWords: function () {
         this.wordList = [
-            { word: "word1", used: false },
-            { word: "word2", used: false },
-            { word: "word3", used: false },
-            { word: "word4", used: false },
-            { word: "word5", used: false }];
+            { word: "russia", used: false },
+            { word: "saudia arabia", used: false },
+            { word: "egypt", used: false },
+            { word: "uruguay", used: false },
+            { word: "portugal", used: false },
+            { word: "spain", used: false },
+            { word: "morocco", used: false },
+            { word: "iran", used: false },
+            { word: "france", used: false },
+            { word: "australia", used: false },
+            { word: "peru", used: false },
+            { word: "denmark", used: false },
+            { word: "argentina", used: false },
+            { word: "iceland", used: false },
+            { word: "croatia", used: false },
+            { word: "nigeria", used: false },
+            { word: "brazil", used: false },
+            { word: "switzerland", used: false },
+            { word: "costa rica", used: false },
+            { word: "serbia", used: false },
+            { word: "germany", used: false },
+            { word: "mexico", used: false },
+            { word: "sweden", used: false },
+            { word: "south korea", used: false },
+            { word: "belgium", used: false },
+            { word: "panama", used: false },
+            { word: "tunisia", used: false },
+            { word: "england", used: false },
+            { word: "poland", used: false },
+            { word: "senegal", used: false },
+            { word: "colombia", used: false },
+            { word: "japan", used: false }];
     }
 };
 
 
 // Create and Initialize the Game.
 var newGame = Object.create(wordGuessGame);
+
 newGame.init();
 
+// "LOSS" - "WIN" - "GAMEOVER-WIN", "GAMEOVER-LOSS"
 //Call the letterGuess function.
 document.onkeyup = function (event) {
     var returnValue = "";
     var userGuess = event.key;
     returnValue = newGame.letterGuess(userGuess);
+    if(returnValue === "USEDLETTER") {
+        displayMT.textContent = ("'" + userGuess + "' has already been guessed!");
+        $("#myModal").modal();
+    }
+    else if(returnValue === "LOSS") {
+        displayMT.textContent = ("You loss! " + newGame.previousWords[newGame.winCount+newGame.lossCount-1] + " will be mad at you!");
+        $("#myModal").modal();
+    }
+    else if(returnValue === "WIN") {
+        displayMT.textContent = ("GOOOOOOAAAAAALLLLL!");
+        $("#myModal").modal();
+    }
+    else if(returnValue === "GAMEOVER-WIN") {
+        displayMT.textContent = ("The game is over but you left a winner! Your final score is " + newGame.winCount + " wins and " + newGame.lossCount+ " losses.");
+        $("#myModal").modal();
+    }
+    else if(returnValue === "GAMEOVER-LOSS") {
+        displayMT.textContent = ("You lost the final round! " + newGame.previousWords[newGame.winCount+newGame.lossCount-1] + " won't be happy. Your final score is " + newGame.winCount + " wins and " + newGame.lossCount+ " losses.");
+        $("#myModal").modal();
+    }
+    //$("#myModal").modal();
     if(returnValue === "GAMEOVER") {
         alert("Game Over. Wins: " + newGame.winCount + ", Losses: " + newGame.lossCount)
     }
